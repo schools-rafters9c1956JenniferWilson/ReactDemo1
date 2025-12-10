@@ -12,8 +12,9 @@ import AdvancedLesson from './04-advanced';
 import QuickReference from './05-quick-reference';
 import TodoProject from './06-todo-project';
 import ZentUseTry from './07-zentuseTry';
+import LearningHub2 from './08-react666';
 
-type LessonType = 'basics' | 'hooks' | 'components' | 'advanced' | 'quick-reference' | 'project' | 'zent-use-try';
+type LessonType = 'basics' | 'hooks' | 'components' | 'advanced' | 'quick-reference' | 'project' | 'zent-use-try' | 'react666';
 
 const lessons = [
   {
@@ -57,6 +58,12 @@ const lessons = [
     title: '📺 Zent 组件库尝试',
     description: '尝试使用 Zent 组件库，学习其用法和特点。',
     icon: '🧩',
+  },
+  {
+    id: 'react666',
+    title: 'react666 组件库尝试',
+    description: '继续学习React',
+    icon: '📖',
   }
 ];
 
@@ -115,6 +122,8 @@ export default function LearningHub() {
         return <TodoProject />;
       case 'zent-use-try':
         return <ZentUseTry />;
+      case 'react666':
+        return <LearningHub2 />;
       default:
         return null;
     }
