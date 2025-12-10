@@ -3,7 +3,13 @@ import Button from 'zent/es/button';
 import {
   Avatar, Badge, Icon, Link,
   Radio as ZentRadio, Switch, Menu,
-  SplitButton, Notify
+  SplitButton, Notify, Breadcrumb,
+  Dropdown,
+  DropdownButton,
+  DropdownClickTrigger,
+  DropdownContent,
+  DropdownPosition,
+  DropdownNav
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
@@ -15,9 +21,12 @@ import 'zent/css/badge.css';
 import 'zent/css/link.css';
 import 'zent/css/radio.css';
 import 'zent/css/switch.css';
+import 'zent/css/loading.css';
 import 'zent/css/menu.css';
 import 'zent/css/split-button.css';
 import 'zent/css/notify.css';
+import 'zent/css/breadcrumb.css';
+import 'zent/css/dropdown-nav.css';
 // 引入样式
 // import 'zent/css/index.css';
 
@@ -48,18 +57,47 @@ export function Radio() {
 
 export function SwitchDemo() {
   const [checked, setChecked] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChangeLarge = (checked: boolean): void => {
-    setChecked(checked);
-    console.log(checked);
+    setLoading(true);
+    // 模拟异步操作
+    setTimeout(() => {
+      setChecked(checked);
+      setLoading(false);
+      console.log(checked);
+    }, 1500);
   };
 
   return (
-    <div>
-      <Switch
-        checked={checked}
-        onChange={handleChangeLarge}
-      />
+    <div style={{ padding: '20px' }}>
+      <h3>Switch 开关示例（Loading状态）</h3>
+      <div style={{ marginBottom: '16px' }}>
+        <Switch
+          checked={checked}
+          onChange={handleChangeLarge}
+          loading={loading}
+          disabled={loading}
+        />
+        &nbsp;&nbsp;
+        <Switch
+          loading
+          disabled
+        />
+        &nbsp;&nbsp;
+        <Switch
+          checked
+          size="small"
+          loading
+          disabled
+        />
+        &nbsp;&nbsp;
+        <Switch
+          size="small"
+          loading
+          disabled
+        />
+      </div>
     </div>
   );
 }
@@ -181,7 +219,70 @@ export function GroupButton() {
       </SplitButton>
     </div>
   );
-} export default function ZentUseTry(): JSX.Element {
+}
+export function BreadcrumbDemo() {
+  interface TitleOption {
+    name: string;
+    href?: string;
+  }
+  const dataList: TitleOption[] = [
+    { name: '首页', href: '//www.youzan.com' },
+    { name: '应用中心', href: '//www.youzan.com' },
+    { name: '营销中心', href: '//www.youzan.com' },
+    { name: '营销玩法' },
+  ];
+  return (
+    <Breadcrumb breads={dataList} maxItemCount={3} />
+  )
+}
+export function DropdownDemo() {
+  const { MenuItem } = Menu;
+  const [visible, setVisible] = useState(false);
+  return (
+    <Dropdown
+      visible={visible}
+      onVisibleChange={v => setVisible(v)}
+      position={DropdownPosition.AutoBottomLeft}
+    >
+
+      <DropdownClickTrigger closeOnClickOutside={false}>
+        <DropdownButton type="primary">点击打开菜单</DropdownButton>
+      </DropdownClickTrigger>
+      <DropdownContent>
+        <Menu onClick={() => setVisible(false)}>
+          <MenuItem>点击关闭菜单</MenuItem>
+          <MenuItem>点击关闭菜单</MenuItem>
+        </Menu>
+      </DropdownContent>
+    </Dropdown>
+  )
+}
+export function DropdownNavDemo() {
+  interface NavItem {
+    key: string;
+    label: string;
+  }
+  const navList: NavItem[] = [
+    {
+      key: 'https://www.baidu.com',
+      label: '百度'
+    },
+    {
+      key: 'https://www.jd.com',
+      label: '京东'
+    },
+  ]
+  return (
+    <div className='dropdown-nav-container'>
+      <DropdownNav
+        list={navList}
+        onItemClick={(e, key) => console.log('key', key, 'event', e)}
+        trigger="click"
+      >下拉导航菜单</DropdownNav>
+    </div>
+  )
+}
+export default function ZentUseTry(): JSX.Element {
   return (
     <div>
       <div>
@@ -227,6 +328,9 @@ export function GroupButton() {
       <SwitchDemo />
       <MenuDemo />
       <GroupButton />
+      <BreadcrumbDemo />
+      <DropdownDemo />
+      <DropdownNavDemo />
     </div>
   );
 }
