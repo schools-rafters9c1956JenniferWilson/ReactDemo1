@@ -2,7 +2,8 @@
 import Button from 'zent/es/button';
 import {
   Avatar, Badge, Icon, Link,
-  Radio as ZentRadio, Switch, Menu
+  Radio as ZentRadio, Switch, Menu,
+  SplitButton, Notify
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
@@ -15,17 +16,22 @@ import 'zent/css/link.css';
 import 'zent/css/radio.css';
 import 'zent/css/switch.css';
 import 'zent/css/menu.css';
+import 'zent/css/split-button.css';
+import 'zent/css/notify.css';
 // 引入样式
 // import 'zent/css/index.css';
 
 const RadioGroup = ZentRadio.Group;
 
+type RadioValue = 'male' | 'female';
+
 export function Radio() {
-  const [value, setValue] = useState('male');
+  const [value, setValue] = useState<RadioValue>('male');
 
   const onChange = (e: any) => {
-    setValue(e.target.value);
-    console.log(e.target.value);
+    const newValue = e.target.value as RadioValue;
+    setValue(newValue);
+    console.log(newValue);
   };
 
   return (
@@ -41,11 +47,12 @@ export function Radio() {
 }
 
 export function SwitchDemo() {
-  const [checked, setChecked] = useState(false)
-  const handleChangeLarge = (checked: boolean) => {
-    setChecked(checked)
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const handleChangeLarge = (checked: boolean): void => {
+    setChecked(checked);
     console.log(checked);
-  }
+  };
 
   return (
     <div>
@@ -54,12 +61,13 @@ export function SwitchDemo() {
         onChange={handleChangeLarge}
       />
     </div>
-  )
+  );
 }
 
 export function MenuDemo() {
-  const [selectedKey, setSelectedKey] = useState('');
+  const [selectedKey, setSelectedKey] = useState<string>('');
   const { MenuItem, SubMenu } = Menu;
+
   const MenuMap: Record<string, string> = {
     '1-1': '食品分类',
     '1-2': '服装分类',
@@ -69,13 +77,16 @@ export function MenuDemo() {
     '3-1': '眼影',
     '3-2': '洗面奶',
   };
-  const onClick = (_e: any, key: string) => {
+
+  const onClick = (_e: any, key: string): void => {
     console.log('Selected key:', key);
     setSelectedKey(key);
-  }
-  const onSubMenuClick = (id: string | number | undefined) => {
+  };
+
+  const onSubMenuClick = (id: string | number | undefined): void => {
     console.log('SubMenu clicked:', id);
-  }
+  };
+
   return (
     <div>
       <Menu
@@ -99,10 +110,74 @@ export function MenuDemo() {
         <span>{`当前选择的节点为: ${MenuMap[selectedKey] || '未选择'}`}</span>
       </div>
     </div>
-  )
+  );
 }
 
-export default function ZentUseTry() {
+interface ColorOption {
+  value: number;
+  text: 'red' | 'blue' | 'green';
+}
+
+export function GroupButton() {
+  const list: ColorOption[] = [
+    {
+      value: 1,
+      text: 'red'
+    },
+    {
+      value: 2,
+      text: 'blue'
+    },
+    {
+      value: 3,
+      text: 'green'
+    }
+  ];
+
+  const handleSelect = (key: string): void => {
+    Notify.success(key);
+  };
+
+  const handleClick = (): void => {
+    Notify.success('请选择你需要的配置');
+  };
+
+  return (
+    <div>
+      <SplitButton
+        type="primary"
+        dropdownData={list}
+        onClick={handleClick}
+        onSelect={handleSelect}
+      >
+        主按钮
+      </SplitButton>
+      <SplitButton
+        dropdownData={list}
+        onClick={handleClick}
+        onSelect={handleSelect}
+      >
+        次按钮
+      </SplitButton>
+      <SplitButton
+        type="text"
+        dropdownData={list}
+        onClick={handleClick}
+        onSelect={handleSelect}
+      >
+        文字按钮
+      </SplitButton>
+      <SplitButton
+        type="text"
+        dropdownData={list}
+        dropdownIcon={'more'}
+        onClick={handleClick}
+        onSelect={handleSelect}
+      >
+      </SplitButton>
+    </div>
+  );
+} export default function ZentUseTry(): JSX.Element {
   return (
     <div>
       <div>
@@ -132,12 +207,6 @@ export default function ZentUseTry() {
         <Badge count={100} />
       </div>
       <div>
-        {/* <Badge count={99}>
-          <Icon type="bell-o" className="demo-cont" />
-        </Badge>
-        <Badge count={120}>
-          <Icon type="bell-o" className="demo-cont" />
-        </Badge> */}
         <Badge count={120} maxCount={10} offset={[-27, 0]}>
           <div className="demo-cont">
             <Icon type="bell-o" style={{ fontSize: '20px' }} />
@@ -153,6 +222,7 @@ export default function ZentUseTry() {
       <Radio />
       <SwitchDemo />
       <MenuDemo />
+      <GroupButton />
     </div>
-  )
+  );
 }
