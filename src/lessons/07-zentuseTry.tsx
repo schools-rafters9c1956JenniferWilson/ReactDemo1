@@ -115,7 +115,7 @@ export function MenuDemo() {
 
 interface ColorOption {
   value: number;
-  text: 'red' | 'blue' | 'green';
+  text: 'red' | 'blue' | 'green' | 'pink';
 }
 
 export function GroupButton() {
@@ -131,6 +131,10 @@ export function GroupButton() {
     {
       value: 3,
       text: 'green'
+    },
+    {
+      value: 4,
+      text: 'pink'
     }
   ];
 
