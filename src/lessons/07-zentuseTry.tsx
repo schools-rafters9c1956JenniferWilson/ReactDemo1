@@ -12,7 +12,8 @@ import {
   DropdownNav, Pagination, MiniPagination, LitePagination,
   Steps, AutoComplete,
   Transfer,
-  MenuCascader
+  MenuCascader,
+  TimeRangePicker,
 } from 'zent';
 import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
 import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
@@ -521,6 +522,23 @@ export function TransferDemo() {
     </div>
   )
 }
+export function TimeRangePickerDemo() {
+  const [value, setValue] = useState<[string, string]>(['', '']);
+
+  const onChangeTimeRange = (val: [string, string]) => {
+    console.log('demo onChangeTimeRange', val);
+    setValue(val);
+  };
+
+  return (
+    <TimeRangePicker
+      className="zent-datepicker-demo"
+      value={value}
+      onChange={onChangeTimeRange}
+    />
+  )
+}
+
 export function CascaderDemo() {
   const [state, setState] = useState<{
     value: Array<CascaderValue[]>;
@@ -696,6 +714,8 @@ export default function ZentUseTry(): JSX.Element {
       <TransferDemo />
       <br />
       <CascaderDemo />
+      <br />
+      <TimeRangePickerDemo />
     </div>
   );
 }
