@@ -10,7 +10,8 @@ import {
   DropdownContent,
   DropdownPosition,
   DropdownNav, Pagination, MiniPagination, LitePagination,
-  Steps, AutoComplete
+  Steps, AutoComplete,
+  Transfer,
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
@@ -481,6 +482,42 @@ export function AutoCompleteDemo2() {
     </>
   )
 }
+export function TransferDemo() {
+  const data = new Array(20).fill(null).map((_, index) => ({
+    option: String(index),
+    text: `option${index}`,
+    disabled: index % 2 === 1,
+  }));
+  const columns = [
+    {
+      name: 'text',
+    },
+  ];
+  const [targetKeys, setTargetKeys] = useState(['8', '9', '10', '15']);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
+  return (
+    <div>
+      <Transfer
+        keyName="option"
+        dataSource={data}
+        targetKeys={targetKeys}
+        onChange={({ targetKeys, selectedKeys }) => {
+          setTargetKeys(targetKeys);
+          setSelectedKeys(selectedKeys);
+        }}
+        list={{ columns }}
+        selectedKeys={selectedKeys}
+        onSelectChange={items => setSelectedKeys(items)}
+        disabled={checked}
+      />
+      <div style={{ marginTop: '20px' }}>
+        <Switch checked={checked} onChange={() => setChecked(!checked)} />
+        disabled
+      </div>
+    </div>
+  )
+}
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -537,6 +574,8 @@ export default function ZentUseTry(): JSX.Element {
       <AutoCompleteDemo />
       <br />
       <AutoCompleteDemo2 />
+      <br />
+      <TransferDemo />
     </div>
   );
 }
