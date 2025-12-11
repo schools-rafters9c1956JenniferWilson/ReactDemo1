@@ -31,6 +31,8 @@ import {
   FormUploadField,
   FormImageUploadField,
   Validators,
+  BlockLoading,
+  Notice,
 } from 'zent';
 import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
 import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
@@ -807,6 +809,43 @@ export function FormDemo() {
   )
 }
 
+export function LoadingDemo() {
+  return (
+    <BlockLoading loading />
+  )
+}
+
+export function NoticeDemo() {
+  const showNotice = (text: string, position: 'right-top' | 'right-bottom' | 'left-top' | 'left-bottom') => () => {
+    Notice.push(<Notice title={text} position={position}>{text}</Notice>);
+  };
+  return (
+    <div>
+      <Button onClick={showNotice('Right Top', 'right-top')}>Right Top</Button>
+      <Button onClick={showNotice('Right Bottom', 'right-bottom')}>
+        Right Bottom
+      </Button>
+      <Button onClick={showNotice('Left Top', 'left-top')}>Left Top</Button>
+      <Button onClick={showNotice('Left Bottom', 'left-bottom')}>
+        Left Bottom
+      </Button>
+    </div>
+  )
+}
+
+export function NotifyDemo() {
+  return (
+    <div>
+      <Button onClick={() => Notify.info('常规提示', 3000)}>常规提示</Button>
+      <Button onClick={() => Notify.success('成功通知', 1000)}>
+        成功通知
+      </Button>
+      <Button onClick={() => Notify.warn('警告通知')}>警告通知</Button>
+      <Button onClick={() => Notify.error('错误通知')}>错误通知</Button>
+    </div>
+  )
+}
+
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -871,6 +910,12 @@ export default function ZentUseTry(): JSX.Element {
       <TimeRangePickerDemo />
       <br />
       <FormDemo />
+      <br />
+      <LoadingDemo />
+      <br />
+      <NoticeDemo />
+      <br />
+      <NotifyDemo />
     </div>
   );
 }
