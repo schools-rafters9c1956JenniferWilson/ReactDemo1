@@ -12,7 +12,10 @@ import {
   DropdownNav, Pagination, MiniPagination, LitePagination,
   Steps, AutoComplete,
   Transfer,
+  MenuCascader
 } from 'zent';
+import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
+import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
 // 按需引入样式 - 只引入用到的组件样式
@@ -518,6 +521,121 @@ export function TransferDemo() {
     </div>
   )
 }
+export function CascaderDemo() {
+  const [state, setState] = useState<{
+    value: Array<CascaderValue[]>;
+    options: IPublicCascaderItem[];
+  }>({
+    value: [],
+    options: [
+      {
+        value: '330000',
+        label: '浙江省',
+        children: [
+          {
+            value: '330100',
+            label: '杭州市',
+            children: [
+              {
+                value: '330106',
+                label: '西湖区',
+              },
+              {
+                value: '330107',
+                label: '余杭区',
+              },
+            ],
+          },
+          {
+            value: '330200',
+            label: '温州市',
+            children: [
+              {
+                value: '330206',
+                label: '龙湾区',
+                disabled: true,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        value: '120000',
+        label: '新疆维吾尔自治区',
+        children: [
+          {
+            value: '120100',
+            label: '博尔塔拉蒙古自治州',
+            children: [
+              {
+                value: '120111',
+                label: '阿拉山口市',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+
+
+  const onChange = (
+    value: Array<CascaderValue[]>,
+    selectedOptions: Array<ICascaderItem[]>,
+    meta: ICascaderMultipleChangeMeta
+  ) => {
+    console.log(value, selectedOptions, meta);
+    setState({
+      ...state,
+      value,
+    });
+  };
+  const asyncFilter = (_keyword?: string, _limit?: number): Promise<Array<ICascaderItem[]>> =>
+    new Promise((resolve) => {
+      console.log('asyncFilter - keyword:', _keyword, 'limit:', _limit);
+      setTimeout(() => {
+        const searchList: Array<IPublicCascaderItem[]> = [
+          [
+            { value: '330000', label: '浙江省' },
+            { value: '330100', label: '杭州市' },
+            // { value: '330101', label: `${_keyword}-1` },
+          ],
+          [
+            { value: '330000', label: '浙江省' },
+            { value: '330200', label: '温州市' },
+            // { value: '330201', label: `${_keyword}-2` },
+          ],
+        ];
+
+        // insert into options if missing
+        const options = clone(state.options);
+        searchList.forEach(path => insertPath(options, path));
+
+        setState({
+          ...state,
+          options,
+        });
+
+        resolve(searchList as Array<ICascaderItem[]>);
+      }, 500);
+    });
+
+  return (
+    <MenuCascader
+      value={state.value}
+      options={state.options}
+      onChange={onChange}
+      expandTrigger="hover"
+      asyncFilter={asyncFilter}
+      clearable
+      searchable
+      async
+      multiple
+      limit={100}  // 自定义搜索结果限制数量，默认是 50
+    />
+  )
+}
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -576,6 +694,8 @@ export default function ZentUseTry(): JSX.Element {
       <AutoCompleteDemo2 />
       <br />
       <TransferDemo />
+      <br />
+      <CascaderDemo />
     </div>
   );
 }
