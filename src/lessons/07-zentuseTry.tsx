@@ -9,26 +9,28 @@ import {
   DropdownClickTrigger,
   DropdownContent,
   DropdownPosition,
-  DropdownNav
+  DropdownNav, Pagination, MiniPagination, LitePagination,
+  Steps
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
 // 按需引入样式 - 只引入用到的组件样式
-import 'zent/css/button.css';
-import 'zent/css/avatar.css';
-import 'zent/css/icon.css';
-import 'zent/css/badge.css';
-import 'zent/css/link.css';
-import 'zent/css/radio.css';
-import 'zent/css/switch.css';
-import 'zent/css/loading.css';
-import 'zent/css/menu.css';
-import 'zent/css/split-button.css';
-import 'zent/css/notify.css';
-import 'zent/css/breadcrumb.css';
-import 'zent/css/dropdown-nav.css';
+// import 'zent/css/button.css';
+// import 'zent/css/avatar.css';
+// import 'zent/css/icon.css';
+// import 'zent/css/badge.css';
+// import 'zent/css/link.css';
+// import 'zent/css/radio.css';
+// import 'zent/css/switch.css';
+// import 'zent/css/loading.css';
+// import 'zent/css/menu.css';
+// import 'zent/css/split-button.css';
+// import 'zent/css/notify.css';
+// import 'zent/css/breadcrumb.css';
+// import 'zent/css/dropdown-nav.css';
+// import 'zent/css/pagination.css';
 // 引入样式
-// import 'zent/css/index.css';
+import 'zent/css/index.css';
 
 const RadioGroup = ZentRadio.Group;
 
@@ -151,12 +153,13 @@ export function MenuDemo() {
   );
 }
 
-interface ColorOption {
-  value: number;
-  text: 'red' | 'blue' | 'green' | 'pink';
-}
+
 
 export function GroupButton() {
+  interface ColorOption {
+    value: number;
+    text: 'red' | 'blue' | 'green' | 'pink';
+  }
   const list: ColorOption[] = [
     {
       value: 1,
@@ -282,9 +285,93 @@ export function DropdownNavDemo() {
     </div>
   )
 }
-export default function ZentUseTry(): JSX.Element {
+export function PaginationDemo() {
+  interface PaginationDemoState {
+    pageSize: number;
+    current: number;
+  }
+  const [state, setState] = useState<PaginationDemoState>({
+    pageSize: 10,
+    current: 1,
+  });
+
+  const { pageSize, current } = state;
+
+  const onChange = (detail: { current: number; pageSize: number }) => {
+    console.log(`页码改变：当前页数为：${detail.current},每页个数为： ${detail.pageSize}`);
+    setState({
+      current: detail.current,
+      pageSize: detail.pageSize || 10,
+    });
+  }
   return (
     <div>
+      <Pagination
+        current={current}
+        pageSize={pageSize}
+        total={101}
+        onChange={onChange}
+      />
+
+      <br />
+
+      <Pagination
+        current={current}
+        pageSize={pageSize}
+        total={101}
+        onChange={onChange}
+        buttonBordered={false}
+      />
+
+      <br />
+
+      <LitePagination
+        current={current}
+        pageSize={pageSize}
+        total={101}
+        onChange={onChange}
+      />
+
+      <br />
+
+      <MiniPagination
+        current={current}
+        pageSize={pageSize}
+        total={101}
+        onChange={onChange}
+      />
+    </div>
+  )
+}
+export function StepsDemo() {
+  interface StepsDemoState {
+    current: number;
+  }
+  const [current, setCurrent] = useState<StepsDemoState>({ current: 1 });
+
+  const onStepChange = (step: number) => {
+    setCurrent({ current: step });
+  };
+
+  return (
+    <div className="zent-steps-demo-breadcrumb">
+      <Steps
+        current={current.current}
+        type="breadcrumb"
+        onStepChange={onStepChange}
+        ghost
+      >
+        <Steps.Step title="登录有赞帐号" />
+        <Steps.Step title="选择门店" />
+        <Steps.Step title="绑定门店" />
+        <Steps.Step title="完成" />
+      </Steps>
+    </div>
+  )
+}
+export default function ZentUseTry(): JSX.Element {
+  return (
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
       <div>
         <Button type="primary">主按钮</Button>
         <Button type="primary" outline>主按钮</Button>
@@ -331,6 +418,7 @@ export default function ZentUseTry(): JSX.Element {
       <BreadcrumbDemo />
       <DropdownDemo />
       <DropdownNavDemo />
+      <PaginationDemo />
     </div>
   );
 }
