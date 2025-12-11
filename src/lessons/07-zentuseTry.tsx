@@ -10,7 +10,7 @@ import {
   DropdownContent,
   DropdownPosition,
   DropdownNav, Pagination, MiniPagination, LitePagination,
-  Steps,
+  Steps, AutoComplete
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
@@ -378,6 +378,109 @@ export function StepsDemo() {
     </div>
   )
 }
+export function AutoCompleteDemo() {
+  const [state, setState] = useState<{ data: string[] }>({ data: [] });
+  const onSelect = (v: string | null) => console.log('onSelect', v);
+  const onSearch = (v: string) => {
+    setState({
+      data: v ? [v, v + v, v + v + v] : [],
+    });
+  };
+  const onChange = (v: string | null) => console.log('onChange', v);
+  return (
+    <AutoComplete
+      data={state.data}
+      onSelect={onSelect}
+      onSearch={onSearch}
+      onChange={onChange}
+    />
+  )
+}
+export function AutoCompleteDemo2() {
+
+  function ControlledComplete() {
+    const [state, setState] = useState<{ value: string; data: any[] }>({ value: '', data: [] });
+
+    const onSelect = (v: string | null) => console.log('onSelect', v);
+    const onSearch = (v: string) => {
+      setState({
+        ...state,
+        data: v ? [v, v + v, v + v + v].map(item => ({ value: item, content: item })) : [],
+      });
+    };
+    const onChange = (v: string | null) => {
+      console.log('onChange', v);
+      setState({ ...state, value: v || '' });
+    };
+
+    const data = [
+      { isGroup: true, content: '浙江', value: 'group-zhejiang' },
+      { value: 'hz', content: '杭州' },
+      { value: '绍兴', content: <div><div>绍!兴!</div><div>这是第二行</div></div> },
+      { value: '温州', content: '温州' },
+      { value: '金华', content: '金华' },
+      { isDivider: true, value: 'divider-1' },
+      { isGroup: true, content: '江苏', value: 'group-jiangsu' },
+      { value: '南京', content: '南京' },
+      { value: '苏州', content: '苏州' },
+      { value: '无锡', content: '无锡' },
+      { value: '常州', content: '常州' },
+    ]
+    return (
+      <AutoComplete
+        placeholder="输入值受限..."
+        value={state.value}
+        data={data}
+        onSelect={onSelect}
+        onSearch={onSearch}
+        onChange={onChange}
+        valueFromOptions
+      />
+    )
+  }
+
+  function SelectComplete() {
+    const [state, setState] = useState<{ value: string | null; data: any[] }>({ value: '', data: [] });
+    const onSelect = (v: string | null) => console.log('onSelect', v)
+    const onSearch = (v: string) => console.log('onSearch', v)
+    const onChange = (v: string | null) => {
+      console.log('onChange', v)
+      setState({
+        ...state, value: v,
+      });
+    }
+    const data = [
+      { isGroup: true, content: '浙江', value: "group-1" },
+      { value: 'hz', content: '杭州' },
+      { value: '绍兴', content: <div><div>绍!兴!</div><div>这是第二行</div></div> },
+      '温州',
+      '金华',
+      { isDivider: true, value: "divider-1" },
+      { isGroup: true, content: '江苏', value: "group-2" },
+      '南京',
+      '苏州',
+      '无锡',
+      '常州',
+    ]
+    return (
+      <AutoComplete
+        placeholder="输入值不受限..."
+        value={state.value}
+        data={data}
+        onSelect={onSelect}
+        onSearch={onSearch}
+        onChange={onChange}
+      />
+    )
+  }
+
+  return (
+    <>
+      <ControlledComplete />
+      <SelectComplete />
+    </>
+  )
+}
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -430,6 +533,10 @@ export default function ZentUseTry(): JSX.Element {
       <PaginationDemo />
       <br />
       <StepsDemo />
+      <br />
+      <AutoCompleteDemo />
+      <br />
+      <AutoCompleteDemo2 />
     </div>
   );
 }
