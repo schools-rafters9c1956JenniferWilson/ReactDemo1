@@ -33,6 +33,7 @@ import {
   Validators,
   BlockLoading,
   Notice,
+  Progress
 } from 'zent';
 import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
 import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
@@ -846,6 +847,16 @@ export function NotifyDemo() {
   )
 }
 
+export function ProgressDemo() {
+  return (
+    <div className="zent-progress-demo">
+      <Progress percent={70} status="normal" />
+      <Progress percent={80} status="success" />
+      <Progress percent={30} status="exception" />
+    </div>
+  )
+}
+
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -916,6 +927,8 @@ export default function ZentUseTry(): JSX.Element {
       <NoticeDemo />
       <br />
       <NotifyDemo />
+      <br />
+      <ProgressDemo />
     </div>
   );
 }
