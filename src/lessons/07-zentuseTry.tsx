@@ -10,7 +10,7 @@ import {
   DropdownContent,
   DropdownPosition,
   DropdownNav, Pagination, MiniPagination, LitePagination,
-  Steps
+  Steps,
 } from 'zent';
 import { useState } from 'react';
 // import Button from 'zent/es/button';
@@ -354,18 +354,27 @@ export function StepsDemo() {
   };
 
   return (
-    <div className="zent-steps-demo-breadcrumb">
-      <Steps
-        current={current.current}
-        type="breadcrumb"
-        onStepChange={onStepChange}
-        ghost
-      >
-        <Steps.Step title="登录有赞帐号" />
-        <Steps.Step title="选择门店" />
-        <Steps.Step title="绑定门店" />
-        <Steps.Step title="完成" />
-      </Steps>
+    <div className="zent-steps-demo-breadcrumb" style={{
+      backgroundColor: '#f5f5f5', height: '80px', width: '100%',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '0 20px',
+      // 添加边框来可视化 padding 区域（调试用）
+      boxSizing: 'border-box',
+      // border: '2px solid red'
+    }}>
+      <div style={{}}>
+        <Steps
+          current={current.current}
+          type="breadcrumb"
+          onStepChange={onStepChange}
+          ghost
+        >
+          <Steps.Step title="登录有赞帐号" />
+          <Steps.Step title="选择门店" />
+          <Steps.Step title="绑定门店" />
+          <Steps.Step title="完成" />
+        </Steps>
+      </div>
     </div>
   )
 }
@@ -419,6 +428,8 @@ export default function ZentUseTry(): JSX.Element {
       <DropdownDemo />
       <DropdownNavDemo />
       <PaginationDemo />
+      <br />
+      <StepsDemo />
     </div>
   );
 }
