@@ -14,6 +14,23 @@ import {
   Transfer,
   MenuCascader,
   TimeRangePicker,
+  Form,
+  FormStrategy,
+  FormInputField,
+  FormSelectField,
+  FormRadioGroupField,
+  FormCheckboxField,
+  FormCheckboxGroupField,
+  FormColorPickerField,
+  FormDateRangePickerField,
+  FormNumberInputField,
+  FormSwitchField,
+  Checkbox,
+  FormTimeRangePickerField,
+  FormSingleUploadField,
+  FormUploadField,
+  FormImageUploadField,
+  Validators,
 } from 'zent';
 import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
 import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
@@ -654,6 +671,142 @@ export function CascaderDemo() {
     />
   )
 }
+
+export function FormDemo() {
+  const form = Form.useForm(FormStrategy.View);
+  return (
+    <Form layout="horizontal" form={form}>
+      <FormInputField
+        name="name"
+        label="昵称："
+        required="请选择类型"
+        props={{
+          spellCheck: false,
+        }}
+      />
+      <FormSelectField
+        name="type"
+        label="类型："
+        required
+        props={{
+          options: [
+            { key: 1, text: '普通用户' },
+            { key: 2, text: '高级用户' },
+          ],
+        }}
+      />
+      <FormRadioGroupField
+        name="sex"
+        label="性别："
+        required
+        validators={[Validators.required('请选择性别')]}
+      >
+        <ZentRadio value="1">男</ZentRadio>
+        <ZentRadio value="2">女</ZentRadio>
+      </FormRadioGroupField>
+      <FormCheckboxGroupField
+        name="hobbies"
+        label="兴趣标签："
+        required="请选择标签"
+        validators={[
+          (value) => {
+            if (!value || value.length < 1) {
+              return {
+                name: 'minLength',
+                message: '请选择标签',
+              };
+            }
+            return null;
+          },
+        ]}
+      >
+        <Checkbox value="movie">电影</Checkbox>
+        <Checkbox value="book">书籍</Checkbox>
+        <Checkbox value="travel">旅行</Checkbox>
+      </FormCheckboxGroupField>
+      <FormNumberInputField
+        name="age"
+        label="年龄："
+        defaultValue={18}
+        props={{
+          showStepper: true,
+        }}
+      />
+      <FormColorPickerField
+        name="color"
+        label="喜欢的颜色："
+        defaultValue="#5197FF"
+      />
+      <FormTimeRangePickerField
+        name="workTime"
+        label="工作时间："
+        defaultValue={['9:00:00', '18:00:00']}
+      ></FormTimeRangePickerField>
+      <FormDateRangePickerField
+        name="dateRange"
+        label="身份证有效期："
+        props={{
+          format: "YYYY-MM-DD",
+        }}
+        validators={[
+          function required(value) {
+            if (!value[0] || !value[1]) {
+              return {
+                name: 'required',
+                message: '请填写有效期',
+              };
+            }
+          },
+        ]}
+      />
+      <FormSwitchField
+        name="isPublic"
+        label="公开个人信息："
+        defaultValue={false}
+      />
+      <FormCheckboxField name="agree" label="同意许可条例：">
+        是
+      </FormCheckboxField>
+      <FormSingleUploadField
+        name="singleFile"
+        label="单文件上传："
+        props={{
+          tips: '文件大小不超过 2M',
+          maxSize: 1024 * 1024 * 2,
+        }}
+      />
+      <FormUploadField
+        name="upload"
+        label="文件上传："
+        props={{
+          tips: '单个文件不超过 2M',
+          maxAmount: 9,
+          maxSize: 1024 * 1024 * 2,
+        }}
+      />
+      <FormImageUploadField
+        name="imageUpload"
+        label="图片文件上传："
+        props={{
+          tips: '单个文件不超过 2M',
+          maxAmount: 9,
+          maxSize: 1024 * 1024 * 2,
+        }}
+      />
+      <Button
+        type="primary"
+        onClick={() => {
+          { console.log(form.getValue()) }
+        }
+        }
+
+      >
+        Values
+      </Button>
+    </Form>
+  )
+}
+
 export default function ZentUseTry(): JSX.Element {
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
@@ -716,6 +869,8 @@ export default function ZentUseTry(): JSX.Element {
       <CascaderDemo />
       <br />
       <TimeRangePickerDemo />
+      <br />
+      <FormDemo />
     </div>
   );
 }
