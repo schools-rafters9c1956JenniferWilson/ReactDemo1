@@ -852,7 +852,7 @@ export function ProgressDemo() {
   React.useEffect(() => {
     const intervalId = setInterval(() => {
       setPercent((prevPercent) => {
-        const newPercent = prevPercent + 10;
+        const newPercent = prevPercent + 5;
         if (newPercent >= 100) {
           clearInterval(intervalId);
           return 100;
