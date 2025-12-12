@@ -37,7 +37,7 @@ import {
 } from 'zent';
 import { clone, insertPath } from 'zent/es/cascader/public-options-fns';
 import type { IPublicCascaderItem, ICascaderItem, CascaderValue, ICascaderMultipleChangeMeta } from 'zent/es/cascader/types';
-import { useState } from 'react';
+import React, { useState } from 'react';
 // import Button from 'zent/es/button';
 // 按需引入样式 - 只引入用到的组件样式
 // import 'zent/css/button.css';
@@ -848,10 +848,27 @@ export function NotifyDemo() {
 }
 
 export function ProgressDemo() {
+  const [percent, setPercent] = useState(0);
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      setPercent((prevPercent) => {
+        const newPercent = prevPercent + 10;
+        if (newPercent >= 100) {
+          clearInterval(intervalId);
+          return 100;
+        }
+        return newPercent;
+      });
+    }, 2000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const status = percent < 100 ? 'normal' : 'success';
+
   return (
     <div className="zent-progress-demo">
-      <Progress percent={70} status="normal" />
-      <Progress percent={80} status="success" />
+      <Progress percent={percent} status={status} />
+      <Progress percent={percent} status={status} />
       <Progress percent={30} status="exception" />
     </div>
   )
