@@ -12,8 +12,9 @@ import AdvancedLesson from './04-advanced';
 import QuickReference from './05-quick-reference';
 import TodoProject from './06-todo-project';
 import ZentUseTry from './07-zentuseTry';
+import TailwindcssLesson from './08-tailwindcss';
 
-type LessonType = 'basics' | 'hooks' | 'components' | 'advanced' | 'quick-reference' | 'project' | 'zent-use-try';
+type LessonType = 'basics' | 'hooks' | 'components' | 'advanced' | 'quick-reference' | 'project' | 'zent-use-try' | 'tailwindcss';
 
 const lessons = [
   {
@@ -57,6 +58,12 @@ const lessons = [
     title: '📺 Zent 组件库尝试',
     description: '尝试使用 Zent 组件库，学习其用法和特点。',
     icon: '🧩',
+  },
+  {
+    id: 'tailwindcss',
+    title: '🎨 Tailwind CSS 入门',
+    description: '学习如何使用 Tailwind CSS 进行快速样式开发。',
+    icon: '🎨',
   }
 ];
 
@@ -97,7 +104,7 @@ function LessonCard({
 }
 
 export default function LearningHub() {
-  const [currentLesson, setCurrentLesson] = useState<LessonType>('zent-use-try');
+  const [currentLesson, setCurrentLesson] = useState<LessonType>('tailwindcss');
 
   const renderLesson = () => {
     switch (currentLesson) {
@@ -115,6 +122,8 @@ export default function LearningHub() {
         return <TodoProject />;
       case 'zent-use-try':
         return <ZentUseTry />;
+      case 'tailwindcss':
+        return <TailwindcssLesson />;
       default:
         return null;
     }
